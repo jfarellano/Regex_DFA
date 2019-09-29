@@ -43,6 +43,9 @@ public class SyntaxTree {
             generateNullable(left);
             generateNullable(right);
             switch (node.getSymbol()) {
+                case "&":
+                    node.setNullable(true);
+                    break;
                 case "|":
                     node.setNullable(left.isNullable() || right.isNullable());
                     break;

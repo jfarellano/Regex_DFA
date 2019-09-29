@@ -47,7 +47,6 @@ public class RegexToDfa {
         String str = getStr(in);
         boolean acc = false;
         for (char c : str.toCharArray()) {
-            
             if (dfat.setCharacter(c)) {
                 acc = dfat.traverse();
             } else {
@@ -110,7 +109,6 @@ public class RegexToDfa {
         operators.add('*');
         operators.add('?');
         operators.add('|');
-        operators.add('&');
         operators.add('$');
         
         int id = 1;

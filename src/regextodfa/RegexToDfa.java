@@ -65,11 +65,35 @@ public class RegexToDfa {
     private static String getRegex(Scanner in) {
         System.out.print("Ingrese una expresion regular: ");
         String regex = in.nextLine();
-        regex = "(" + changeOneOrMore(regex) + ")";
+        regex = "(" + changeIner(changePlus(regex)) + ")";
         return regex+"#";
     }
     
-    public static String changeOneOrMore(String regex){
+    public static String changeIner(String regex){
+        if(regex.contains("?")){
+            while(regex.indexOf("?") != -1){
+                int index = regex.indexOf("?");
+                if(regex.charAt(index - 1) == ')'){
+                    int start = indexOfOpen(regex, index);
+                    int end = index;
+                    String exp = regex.substring(start, end);
+                    String ant = regex.substring(0, start);
+                    String post = regex.substring(index + 1);
+                    regex = ant + "(" + exp + "|&)" + post;
+                }else{
+                    int start = index - 1;
+                    int end = index;
+                    String exp = regex.substring(start, end);
+                    String ant = regex.substring(0, start);
+                    String post = regex.substring(index + 1);
+                    regex = ant + "(" + exp + "|&)" + post;
+                }
+            }
+            return regex;
+        }else return regex;
+    }
+    
+    public static String changePlus(String regex){
         if(regex.contains("+")){
             while(regex.indexOf("+") != -1){
                 int index = regex.indexOf("+");
@@ -110,6 +134,7 @@ public class RegexToDfa {
         operators.add('?');
         operators.add('|');
         operators.add('$');
+        //operators.add('&');
         
         int id = 1;
         for (int i = 0; i < regex.length(); i++) {

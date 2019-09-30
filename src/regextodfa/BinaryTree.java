@@ -28,7 +28,7 @@ class BinaryTree {
         }
 
         Character numsSyms[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                                '#', '=', '_', '.', '*', '/', '+', '-', ' ', '(', ')', '&'};
+                                '#', '=', '_', '.', '*', '/', '+', '-', ' ', '(', ')', ' '};
 
         for (int i = 0; i < numsSyms.length; i++) {
             input.add(numsSyms[i]);
@@ -41,7 +41,7 @@ class BinaryTree {
         operator.clear();
 
         for (int i = 0; i < regex.length(); i++) {
-            if (isCharInput(regex.charAt(i))) {
+            if (isCharInput(regex.charAt(i)) || regex.charAt(i) == '&') {
                 pushStack(Character.toString(regex.charAt(i)));
             } else if (operator.isEmpty()) {
                 operator.push(regex.charAt(i));
@@ -105,7 +105,6 @@ class BinaryTree {
                 case ('|'):
                     or();
                     break;
-
                 default:
                     System.out.println("Simbolo desconocido: " + pos);
                     System.exit(1);
@@ -160,8 +159,7 @@ class BinaryTree {
         String regEx = new String("");
 
         for (int i = 0; i < regex.length() - 1; i++) {
-            if ( isCharInput( regex.charAt(i) ) && isCharInput( regex.charAt(i + 1) ) ) {
-
+            if ((isCharInput( regex.charAt(i) ) || regex.charAt(i+1) == '&' ) && isCharInput( regex.charAt(i + 1) )) {
                 regEx += regex.charAt(i) + "$";
             } else if (isCharInput(regex.charAt(i)) && regex.charAt(i + 1) == '(') {
                 regEx += regex.charAt(i) + "$";

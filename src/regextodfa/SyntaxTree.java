@@ -37,7 +37,7 @@ public class SyntaxTree {
         if (node == null) {
             return;
         }
-        if (!(node instanceof LeafNode)) {
+        if (!(node instanceof LeafNode) || node.getSymbol().compareTo("&") == 0) {
             Node left = node.getLeft();
             Node right = node.getRight();
             generateNullable(left);
@@ -62,11 +62,13 @@ public class SyntaxTree {
     private void generateFirstposLastPos(Node node) {
         if (node == null) {
             return;
-        }
+        }  
         if (node instanceof LeafNode) {
             LeafNode lnode = (LeafNode) node;
-            node.addToFirstPos(lnode.getNum());
-            node.addToLastPos(lnode.getNum());
+            if(node.getSymbol().compareTo("&") != 0){
+                node.addToFirstPos(lnode.getNum());
+                node.addToLastPos(lnode.getNum());
+            }
         } else {
             Node left = node.getLeft();
             Node right = node.getRight();

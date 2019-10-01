@@ -15,6 +15,7 @@ public class RegexToDfa {
     private Set<Integer>[] nextPos;
     private Node root;
     private Set<State> DStates;
+    private Set<State> DStatesOut;
     private Set<String> input;
     private HashMap<Integer, String> regexStates;
     private String regex;
@@ -25,6 +26,7 @@ public class RegexToDfa {
         regex = "(" + changeIner(changePlus(regex)) + ")#";
         //Scanner in = new Scanner(System.in);
         DStates = new HashSet<>();
+        DStatesOut = new HashSet<>();
         input = new HashSet<String>();
         regexStates = new HashMap<Integer, String>();
         input = new HashSet<>();
@@ -140,8 +142,7 @@ public class RegexToDfa {
         //operators.add('&');
         
         int id = 1;
-        System.out.println(regex);
-        System.out.println("regex lengh before "+regex.length());
+
         for (int i = 0; i < regex.length(); i++) {
             char position = regex.charAt(i);
             
@@ -224,5 +225,12 @@ public class RegexToDfa {
     public Node getRoot(){
         return root;
     }
+    
+        public Set<State> getDstates(){
+        return DStatesOut;
+    }
+        public State getRootState(){
+            return createDFA();
+        }
 
 }

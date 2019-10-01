@@ -6,6 +6,9 @@
 package regextodfa;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -174,19 +177,35 @@ public class UI extends javax.swing.JFrame {
     private void uploadInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadInputActionPerformed
         // TODO add your handling code here:
         
+        //init Dfa main class
         RegexToDfa regexProcessor = new RegexToDfa();
+        //getting the input regex
         String inputRegex = inputTf.getText();
-        System.out.println(inputRegex);
+        System.out.println("Cadena introducida - "+inputRegex);
+        //put regex to be procesed
         regexProcessor.initialize(inputRegex);
+        //getting root to bult tree
         Node root = regexProcessor.getRoot();
-        //TreeModel a = SyntacticTree.getModel();
+        //init the root to the new TreeModel
         DefaultMutableTreeNode model = new DefaultMutableTreeNode(root);
         //model.getUserObject();
+        //Fill tree with the travel arround nodes in hierarchical order
         fillTree(model, root);
+        //init model with the root node
         DefaultTreeModel treeModel = new DefaultTreeModel(model);
+        //init ui componet with the data of the model
         SyntacticTree.setModel(treeModel);
+        //putting alphabet
         AlphabetTA.setText(concatAlphabet());
+        //getting states to make DFA table
+        Set<State> DfaStates = regexProcessor.getDstates();
+        State rootState = regexProcessor.getRootState();
+        //hashmaps with all the moves
+        HashMap<String, State> trash = rootState.getAllMoves();
+        String DFATable = "";
+        fillDFA(trash, DFATable);
         
+        //know if there is a chain to analize and determine if is valid or not
         if(!inputChain.getText().equals("")){
             String Answer = regexProcessor.checkChain(inputChain.getText());
             tableTA.setText(Answer);
@@ -250,12 +269,35 @@ public class UI extends javax.swing.JFrame {
     }
     
     private String concatAlphabet(){
-        String temp = "Vocabulario \n \n {";
+        String temp = "Alfabeto \n \n {";
         for (Object symbol : alphabet){
             temp+=" "+symbol.toString()+",";
         }
         temp+="}";
         return temp;
+    }
+    
+    private void fillDFA(HashMap<String, State> datos, String out){
+        for (Map.Entry<String, State> entry : datos.entrySet()) {
+            String tempNameString = "";
+            for( Object a: entry.getValue().getName()){
+                tempNameString += a.toString()+", ";
+            }
+            if (tempNameString.equals("")){
+                tempNameString = "Vacio (Estado final)";
+            }
+            out += "Pos " + (entry.getValue().getId() -1) + " || Symbol "+ entry.getKey()+ " -> "+tempNameString+"\n";
+        }
+        System.out.println(out);
+    }
+    
+    private void generarTabla(State state){
+        HashMap tranD = new HashMap();
+        generarTabla(state);
+        if(tranD.get(state.name)!=null){
+            HashMap moves = new HashMap();
+           // for(char a : state.)
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

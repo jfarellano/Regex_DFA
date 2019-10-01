@@ -35,7 +35,7 @@ class BinaryTree {
         }
 
         regex = AddConcatenationSymbol(regex);
-        System.out.println(regex);
+        System.out.println("Cadena Procesada - "+regex);
 
         stackNode.clear();
         operator.clear();
@@ -108,6 +108,7 @@ class BinaryTree {
                 default:
                     System.out.println("Simbolo desconocido: " + pos);
                     //System.exit(1);
+                    //finish();
                     break;
             }
         }
@@ -115,7 +116,6 @@ class BinaryTree {
 
     private void noneOrMore() {
         Node node = stackNode.pop();
-
         Node root = new Node("*");
         root.setLeft(node);
         root.setRight(null);

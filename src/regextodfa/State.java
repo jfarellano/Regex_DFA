@@ -64,4 +64,8 @@ public class State {
         return move;
     }
     
+    public int getId(){
+        return ID;
+    }
+    
 }

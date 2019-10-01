@@ -12,25 +12,24 @@ import java.util.Set;
  */
 public class RegexToDfa {
 
-    private static Set<Integer>[] nextPos;
-    private static Node root;
-    private static Set<State> DStates;
-    private static Set<String> input;
-    private static HashMap<Integer, String> regexStates;
+    private Set<Integer>[] nextPos;
+    private Node root;
+    private Set<State> DStates;
+    private Set<String> input;
+    private HashMap<Integer, String> regexStates;
+    private String regex;
+    
 
-    public static void main(String[] args) {
-        initialize();
-    }
-
-    public static void initialize() {
-        Scanner in = new Scanner(System.in);
+    public void initialize(String outRegex) {
+        regex = outRegex;
+        //Scanner in = new Scanner(System.in);
         DStates = new HashSet<>();
         input = new HashSet<String>();
         regexStates = new HashMap<Integer, String>();
         input = new HashSet<>();
-        
-        String regex = getRegex(in);
-        
+        System.out.println(regex);
+        //regex = getRegex(in);
+        System.out.println("regex lengh before "+regex.length());
         fecthSymbols(regex);
 
         SyntaxTree st = new SyntaxTree(regex);
@@ -41,10 +40,21 @@ public class RegexToDfa {
          * creating the DFA using the syntax tree were created upside and
          * returning the start state of the resulted DFA
          */
+        
+    }
+    //Legacy method
+    private String getRegex(Scanner in) {
+        System.out.print("Ingrese una expresion regular: ");
+        String regex = in.nextLine();
+        regex = "(" + changeIner(changePlus(regex)) + ")";
+        return regex+"#";
+    }
+    
+    public String checkChain(String chain){
         State q0 = createDFA();
         DfaTraversal dfat = new DfaTraversal(q0, input);
         
-        String str = getStr(in);
+        String str = chain;
         boolean acc = false;
         for (char c : str.toCharArray()) {
             if (dfat.setCharacter(c)) {
@@ -55,21 +65,15 @@ public class RegexToDfa {
             }
         }
         if (acc) {
-            System.out.println((char) 27 + "[32m" + "this string is acceptable by the regex!");
+            return "Esta cadena es valida para el regex dado";
         } else {
-            System.out.println((char) 27 + "[31m" + "this string is not acceptable by the regex!");
+            return "Esta cadena es invalida para el regex dado";
         }
-        in.close();
-    }
-
-    private static String getRegex(Scanner in) {
-        System.out.print("Ingrese una expresion regular: ");
-        String regex = in.nextLine();
-        regex = "(" + changeIner(changePlus(regex)) + ")";
-        return regex+"#";
+        
     }
     
-    public static String changeIner(String regex){
+    
+    public String changeIner(String regex){
         if(regex.contains("?")){
             while(regex.indexOf("?") != -1){
                 int index = regex.indexOf("?");
@@ -93,7 +97,7 @@ public class RegexToDfa {
         }else return regex;
     }
     
-    public static String changePlus(String regex){
+    public String changePlus(String regex){
         if(regex.contains("+")){
             while(regex.indexOf("+") != -1){
                 int index = regex.indexOf("+");
@@ -117,7 +121,7 @@ public class RegexToDfa {
         }else return regex;
     }
     
-    public static int indexOfOpen(String regex, int index){
+    public int indexOfOpen(String regex, int index){
         for(int i = index; i >= 0; i--){
             if(regex.charAt(i) == '('){
                 return i;
@@ -126,7 +130,7 @@ public class RegexToDfa {
         return -1;
     }
 
-    private static void fecthSymbols(String regex) {
+    private void fecthSymbols(String regex) {
         Set<Character> operators = new HashSet<>();
         operators.add('(');
         operators.add(')');
@@ -137,6 +141,8 @@ public class RegexToDfa {
         //operators.add('&');
         
         int id = 1;
+        System.out.println(regex);
+        System.out.println("regex lengh before "+regex.length());
         for (int i = 0; i < regex.length(); i++) {
             char position = regex.charAt(i);
             
@@ -147,7 +153,7 @@ public class RegexToDfa {
         }
     }
 
-    private static State createDFA() {
+    private State createDFA() {
         int id = 0;
         Set<Integer> firstpos_n0 = root.getFirstPos();
 
@@ -209,11 +215,15 @@ public class RegexToDfa {
         return q0;
     }
 
-    private static String getStr(Scanner in) {
+    private String getStr(Scanner in) {
         System.out.print("Enter a string: ");
         String str;
         str = in.nextLine();
         return str;
+    }
+    
+    public Node getRoot(){
+        return root;
     }
 
 }

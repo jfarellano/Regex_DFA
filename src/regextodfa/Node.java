@@ -127,4 +127,13 @@ public class Node {
     public void setNullable(boolean nullable) {
         this.nullable = nullable;
     }
+    
+    @Override
+    public String toString(){
+       return getSymbol()+ " || FirstPos-> " + getFirstPos()+" || LastPos-> "+getLastPos();  
+       
+    }
+    public String toStringSimple(){
+       return getSymbol();
+    }
 }

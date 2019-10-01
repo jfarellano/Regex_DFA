@@ -1,6 +1,6 @@
 package regextodfa;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -19,6 +19,7 @@ public class RegexToDfa {
     private Set<String> input;
     private HashMap<Integer, String> regexStates;
     private String regex;
+    public ArrayList<String> chars;
     
 
     public void initialize(String outRegex) {
@@ -30,7 +31,9 @@ public class RegexToDfa {
         input = new HashSet<String>();
         regexStates = new HashMap<Integer, String>();
         input = new HashSet<>();
+        chars = new ArrayList<String>();
         
+        fecthOrgRegex(outRegex, regex);
         fecthSymbols(regex);
 
         SyntaxTree st = new SyntaxTree(regex);
@@ -130,6 +133,27 @@ public class RegexToDfa {
         }
         return -1;
     }
+    
+    private void fecthOrgRegex(String regex, String newRegex) {
+        Set<Character> operators = new HashSet<>();
+        operators.add('(');
+        operators.add(')');
+        operators.add('*');
+        operators.add('?');
+        operators.add('+');
+        operators.add('|');
+        operators.add('$');
+        for (int i = 0; i < regex.length(); i++) {
+            char position = regex.charAt(i);
+            
+            if(!operators.contains(position)) {
+                if(!chars.contains("" + position)){
+                    chars.add("" + position);
+                }
+            }
+        }
+        if(newRegex.contains("&")) chars.add("&");
+    }
 
     private void fecthSymbols(String regex) {
         Set<Character> operators = new HashSet<>();
@@ -137,6 +161,7 @@ public class RegexToDfa {
         operators.add(')');
         operators.add('*');
         operators.add('?');
+        operators.add('+');
         operators.add('|');
         operators.add('$');
         //operators.add('&');
@@ -153,7 +178,7 @@ public class RegexToDfa {
         }
     }
 
-    private State createDFA() {
+    public State createDFA() {
         int id = 0;
         Set<Integer> firstpos_n0 = root.getFirstPos();
 

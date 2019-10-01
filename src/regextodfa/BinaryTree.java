@@ -107,7 +107,7 @@ class BinaryTree {
                     break;
                 default:
                     System.out.println("Simbolo desconocido: " + pos);
-                    System.exit(1);
+                    //System.exit(1);
                     break;
             }
         }

@@ -22,14 +22,13 @@ public class RegexToDfa {
 
     public void initialize(String outRegex) {
         regex = outRegex;
+        regex = "(" + changeIner(changePlus(regex)) + ")#";
         //Scanner in = new Scanner(System.in);
         DStates = new HashSet<>();
         input = new HashSet<String>();
         regexStates = new HashMap<Integer, String>();
         input = new HashSet<>();
-        System.out.println(regex);
-        //regex = getRegex(in);
-        System.out.println("regex lengh before "+regex.length());
+        
         fecthSymbols(regex);
 
         SyntaxTree st = new SyntaxTree(regex);
@@ -60,7 +59,7 @@ public class RegexToDfa {
             if (dfat.setCharacter(c)) {
                 acc = dfat.traverse();
             } else {
-                System.out.println("WRONG CHARACTER!");
+                System.out.println("Caracter Equivocado!");
                 System.exit(0);
             }
         }
